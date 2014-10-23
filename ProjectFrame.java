@@ -2,6 +2,7 @@ package graphisme;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -274,7 +275,7 @@ public class ProjectFrame extends JFrame {
 	 String valeur = null;//élèment d'un triplet : ressource
 	 ArrayList<Triple> triples = new ArrayList<Triple>() ;//ensembl de triples extraits du fichier
 		try {
-			tamponLectur = new BufferedReader(new FileReader(dialogue.getSelectedFile()));
+			tamponLectur = new BufferedReader(new FileReader(fichier));
 			int j = 0;
 			while ((ligne = tamponLectur.readLine()) != null) {
 				int i = 0;
@@ -320,9 +321,22 @@ public class ProjectFrame extends JFrame {
 			pathLabel.setText(dialogue.getSelectedFile().getAbsolutePath());
 			bottomPanel.add(pathLabel);
 			
-			lireDansRDF(dialogue.getSelectedFile());
 			
-			RDFTripleModel = new JTableRDFTripleModel(lireDansRDF(dialogue.getSelectedFile()));
+			
+
+			 genererRDFwithJENA rdf_o=new genererRDFwithJENA();
+			 
+			String txt = "D:\\ws1 2014\\interface projet semantic searching\\resultat.txt";
+			 
+			 String out2 = dialogue.getSelectedFile().getPath();
+		 File ftxt=new File(txt);
+		
+			
+			rdf_o.rdf_to_text(out2,txt);
+		
+			
+			
+			RDFTripleModel = new JTableRDFTripleModel(lireDansRDF(ftxt));
 			RDFTriple = new JTableRDFTriple(RDFTripleModel);
 			
 			centerPanel.setViewportView(RDFTriple);
