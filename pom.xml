@@ -14,43 +14,99 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <settings>  
+  <mirrors>
+    <mirror>
+      <id>UK</id>
+      <name>UK Central</name>
+      <url>http://uk.maven.org/maven2</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+  </mirrors>  
+</settings>
+
  <developers>
 	<developer>
-	 <email>wondeudaniel@yahoo.fr</email>
-	 <id>Daniel</id>
-	 <roles>
-	 	<role>developer</role>
-	 </roles>
+	 	<email>wondeudaniel@yahoo.fr</email>
+	 	<id>Daniel</id>
+	 	<roles>
+	 		<role>developer</role>
+	 	</roles>
 	</developer>
+
 	<developer>
-	 <email>alassndiaye1@gmail.com</email>
-	 <id>Alassane</id>
-	 <roles>
-	 	<role>developer</role>
-	 </roles>
+	 	<email>alassndiaye1@gmail.com</email>
+	 	<id>Alassane</id>
+	 	<roles>
+	 		<role>developer</role>
+	 	</roles>
 	</developer>
 	
 	<developer>
-	 <email>alassndiaye1@gmail.com</email>
-	 <id>Alassane</id>
-	 <roles>
-	 	<role>developer</role>
-	 </roles>
+	 	<email>derdouri.zakaria@gmail.com</email>
+	 	<id>Abdallaoui Mhedi</id>
+	 	<roles>
+	 		<role>developer</role>
+	 	</roles>
 	</developer>
-	</developers>
+
+	<developer>
+	 	<email>derdouri.zakaria@gmail.com</email>
+	 	<id>Derdouri Zakaria</id>
+	 	<roles>
+	 		<role>developer</role>
+	 	</roles>
+	</developer>
+
+	<developer>
+	 	<email>s.manouni@yahoo.fr</email>
+	 	<id>Manouni Soukaina</id>
+	 	<roles>
+	 		<role>developer</role>
+	 	</roles>
+	</developer>
+
+	<developer>
+	 	<email>yoricklionel@yahoo.fr</email>
+	 	<id>Mvou yorick</id>
+	 	<roles>
+	 		<role>developer</role>
+	 	</roles>
+	</developer>
+
+</developers>
 	
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
+<dependencies>
+	<dependency>
+    	<groupId>junit</groupId>
+    	<artifactId>junit</artifactId>
+      	<version>3.8.1</version>
+      	<scope>test</scope>
     </dependency>
+
     <dependency>
-	    <groupId>org.apache.jena</groupId>
-	    <artifactId>apache-jena-libs</artifactId>
-	    <type>pom</type>
-	    <version>2.12.1</version>
-  	</dependency>
+		<groupId>org.apache.jena</groupId>
+		<artifactId>jena-core</artifactId>
+		<version>2.12.1</version>
+	</dependency>
+
+  	<dependency>
+		<groupId>org.apache.lucene</groupId>
+		<artifactId>lucene-core</artifactId>
+		<version>4.10.1</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.lucene</groupId>
+		<artifactId>lucene-queryparser</artifactId>
+		<version>4.10.1</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.lucene</groupId>
+		<artifactId>lucene-analyzers-common</artifactId>
+		<version>4.10.1</version>
+	</dependency>
+
   </dependencies>
 </project>
