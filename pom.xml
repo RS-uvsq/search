@@ -15,28 +15,62 @@
   </properties>
 
  <developers>
-	<developer>
-	 <email>wondeudaniel@yahoo.fr</email>
-	 <id>Daniel</id>
-	 <roles>
-	 	<role>developer</role>
-	 </roles>
-	</developer>
-	<developer>
-	 <email>alassndiaye1@gmail.com</email>
-	 <id>Alassane</id>
-	 <roles>
-	 	<role>developer</role>
-	 </roles>
-	</developer>
-	
-	<developer>
-	 <email>alassndiaye1@gmail.com</email>
-	 <id>Alassane</id>
-	 <roles>
-	 	<role>developer</role>
-	 </roles>
-	</developer>
+  	<developer>
+    	 <email>wondeudaniel@yahoo.fr</email>
+    	 <id>Daniel</id>
+    	 <roles>
+    	 	 <role>developer</role>
+    	 </roles>
+  	</developer>
+
+  	<developer>
+    	 <email>yoricklionel@yahoo.fr</email>
+    	 <id>Yorick</id>
+    	 <roles>
+    	 	 <role>developer</role>
+    	 </roles>
+  	</developer>
+  	
+  	<developer>
+    	 <email>alassndiaye1@gmail.com</email>
+    	 <id>Alassane</id>
+    	 <roles>
+    	 	 <role>developer</role>
+    	 </roles>
+  	</developer>
+
+    <developer>
+       <email>derdouri.Zakaria@gmail.com</email>
+       <id>Zacharia</id>
+       <roles>
+          <role>developer</role>
+       </roles>
+    </developer>
+
+    <developer>
+       <email>s.manouni@yahoo.fr</email>
+       <id>Soukaina</id>
+       <roles>
+          <role>developer</role>
+       </roles>
+    </developer>
+
+    <developer>
+       <email>zidenchokri91@gmail.com</email>
+       <id>Ziden</id>
+       <roles>
+          <role>developer</role>
+       </roles>
+    </developer>
+
+    <developer>
+       <email>abdallaoui.mehdi@yahoo.fr</email>
+       <id>Mehdi</id>
+       <roles>
+          <role>developer</role>
+       </roles>
+    </developer>
+
 	</developers>
 	
   <dependencies>
