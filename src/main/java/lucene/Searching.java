@@ -5,40 +5,39 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 
-/*
- * @author Alassane Ndiaye
- */
+
 public class Searching {
-/*
- * permet de lire l'index comme IndexWriter permet d'écrire dans l'index
- */
+	/*
+	 * permet de lire l'index comme IndexWriter permet d'écrire dans l'index
+	 */
 	private IndexReader index;
 	
-/*
- * un ensemble de mots clés	
- */
+	/*
+	 * un ensemble de mots clés	
+	 */
 	private Set<String> setOfKeywords;
 	
-/*
- * l'ensemble des documents lucene correspondants au motif de la recherche	
- */
+	/*
+	 * l'ensemble des documents lucene correspondants au motif de la recherche	
+	 */
 	
 	/*
 	 * association de mots clé et de ressources.Un mot clé est associé à 0 ou plusieurs ressources
 	 */
 	private HashMap<String,Set<Document> > keywordResources;
+	
+	private static final String champs[] =  {"propriete","litteral"} ;
 
 	
 	/*
@@ -56,25 +55,25 @@ public class Searching {
 		
 		while(iter.hasNext()){//tant qu'il y a un mot clé
 			documents = new HashSet<Document>();
-			QueryParser parser = new QueryParser("litteral", new StandardAnalyzer());//on choisit les champs sur lesquels portera la requete
+			MultiFieldQueryParser parser = new MultiFieldQueryParser(champs, new StandardAnalyzer());//la requete porte sur les champs propriete et litteral
 			keyword = iter.next();// retourne le mot clé suivant
 			Query query = parser.parse(keyword);
-			IndexSearcher searcher = new IndexSearcher(reader);
-						
-			
-			int hitsPerPage = 4;
-			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, false);
+			IndexSearcher searcher = new IndexSearcher(reader);						
+
+			int hitsPerPage = 10;
+			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
 			searcher.search(query, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
-			for(int i=0;i<hits.length;++i) {
+			for(int i= 0 ; i < hits.length ; ++i) {
 			    int docId = hits[i].doc;
 			    Document doc = searcher.doc(docId);
+			    //System.out.println(doc.get("ressource"));
 			    documents.add(doc);
 		    }
 			
-			keywordResources.put(keyword,documents);
+			keywordResources.put(keyword,documents);	
 		}
-		    reader.close();		
+		    reader.close();		    
 		
 	}
 
@@ -98,11 +97,9 @@ public class Searching {
 		
 		StringTokenizer tokenizer = new StringTokenizer(motif," ");//pour extraire les mots clés du motifs
 		
-		while(tokenizer.hasMoreTokens()){
+		while(tokenizer.hasMoreTokens())
 			setOfKeywords.add(tokenizer.nextToken());//on ajoute chaque token à l'ensemble des mots-clé 
-		
-		
-		}
+					
 		return setOfKeywords;
 			
 	}
@@ -123,6 +120,5 @@ public class Searching {
 
 	public void setKeywordResource(HashMap<String, Set<Document>> keywordResource) {
 		this.keywordResources = keywordResource;
-	}
-	
+	}	
 }
