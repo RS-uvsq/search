@@ -11,21 +11,26 @@ import lucene.Searching;
 
 import org.apache.lucene.document.Document;
 
+/**********************************************************************************/
+/*****       CLASSE QUI CONSTRUIT NOTRE ZONE DE RECHERCHE   ***********************/
+/**********************************************************************************/
+
+/**
+ * 
+ * @author Daniel
+ *
+ */
 public class ChampTexte extends JTextField implements DocumentListener {
 
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;	
 	
-	//private JTableRessourceModel tableModel;
 	/**
 	 * constructor with the reference to frame table model
 	 * @param tableModel
 	 */
 	public ChampTexte(){
-		super();
-		
-		//reference conservée sur le model initial
-		//this.tableModel=tableModel;
+		super();		
 		this.getDocument().addDocumentListener(this);
 	}
 	
@@ -35,10 +40,7 @@ public class ChampTexte extends JTextField implements DocumentListener {
 	 * @param tableModel the reference to the the frame table's model
 	 */
 	public ChampTexte(int i) {
-		super(i);
-		//this.tableModel=tableModel;
-		
-		//System.out.println("table model ds champ text "+tableModel);
+		super(i);		
 		this.getDocument().addDocumentListener(this);
 	}
 
@@ -98,8 +100,6 @@ public class ChampTexte extends JTextField implements DocumentListener {
 		 */
 		//ProjectFrame.modelJTable.fireTableDataChanged();
 		
-		ProjectFrame1.tableModel.fireTableDataChanged();
-		//centerPanel.setViewportView(table);
-		//table.repaint();
+		ProjectFrame1.tableModel.fireTableDataChanged();		
 	}
 }

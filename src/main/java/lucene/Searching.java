@@ -62,7 +62,7 @@ public class Searching {
 			IndexSearcher searcher = new IndexSearcher(reader);
 						
 			
-			int hitsPerPage = 1;
+			int hitsPerPage = 4;
 			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, false);
 			searcher.search(query, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -98,9 +98,11 @@ public class Searching {
 		
 		StringTokenizer tokenizer = new StringTokenizer(motif," ");//pour extraire les mots clés du motifs
 		
-		while(tokenizer.hasMoreTokens())
+		while(tokenizer.hasMoreTokens()){
 			setOfKeywords.add(tokenizer.nextToken());//on ajoute chaque token à l'ensemble des mots-clé 
-					
+		
+		
+		}
 		return setOfKeywords;
 			
 	}
