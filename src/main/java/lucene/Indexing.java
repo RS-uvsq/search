@@ -1,17 +1,26 @@
 package lucene;
 
 import com.hp.hpl.jena.rdf.model.Model;
+<<<<<<< HEAD
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+=======
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.SimpleSelector;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+<<<<<<< HEAD
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.InputStream;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
+=======
+import java.io.File;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -36,7 +45,11 @@ public class Indexing {
 	/*repertoire contenant l'index
 	 * 
 	 */
+<<<<<<< HEAD
 	private FSDirectory IndexDirectory;
+=======
+	private FSDirectory indexDirectory;
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 	/*
 	 * sert à la configuration de l'index et prends en paramètre l'analyseur et 
 	 * la version de la version de librairie lucene
@@ -54,6 +67,7 @@ public class Indexing {
 	/*
 	 * @throws lance une exception si le repertoire de l'index
 	 * n'existe pas.
+<<<<<<< HEAD
 	 */
 	
 	/*
@@ -67,12 +81,19 @@ public class Indexing {
 		 
 	 }
 	
+=======
+	 * cette classe permet de creer un index de ressources à partir du modele RDFJena.
+	 * Une ressource est un champ du document lucene(ressource,propriete,litteral)
+	 */
+	
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 	public Indexing(Model model) throws Exception{
 		/*
 		 * on instance tous les objets nécessaires à la création
 		 * de l'index puis on instancie l'index.
 		 */
 	
+<<<<<<< HEAD
 		indexAnalyser = new SimpleAnalyzer(Version.LUCENE_40);
 		IndexDirectory = FSDirectory.open(new File("src/lucene/indexFolder"));
 		indexConfig = new IndexWriterConfig(Version.LUCENE_40, indexAnalyser);
@@ -97,10 +118,35 @@ public class Indexing {
 			
 	
 		
+=======
+		this.model = model;
+		indexAnalyser = new StandardAnalyzer();
+		File indexFile = new File("lucene\\indexDirectory");
+		
+		indexDirectory = FSDirectory.open(indexFile);
+		indexConfig = new IndexWriterConfig(Version.LATEST, indexAnalyser);
+		index = new IndexWriter(indexDirectory, indexConfig);		
+	
+	
+		//itérator pour parcourir les statements
+		// obtenir la prochaine déclaration
+		
+		  StmtIterator iter = model.listStatements();//on l'ensemble des statements du model à l'aide d'un iterator
+	      while(iter.hasNext()){
+	    	    Statement st = iter.next();
+	           // String ressDesc = this.descripRessource(st,"");// decrit entierement la ressource du triplet
+	            Document doc = new Document();
+				doc.add(new StringField("ressource",st.getSubject().toString(),Field.Store.YES));
+				doc.add(new TextField("propriete",st.getPredicate().toString(),Field.Store.YES));
+				doc.add(new TextField("litteral",st.getObject().toString(),Field.Store.YES));
+				index.addDocument(doc);
+	      }
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 		
 		index.close();
 			
 	}
+<<<<<<< HEAD
 
 
 	public String getDescrRessource() {
@@ -110,6 +156,8 @@ public class Indexing {
 	public void setDescrRessource(String descrRessource) {
 		this.descrRessource = descrRessource;
 	}
+=======
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 	
 	public void setIndex(IndexWriter index) {
 		this.index = index;
@@ -120,11 +168,19 @@ public class Indexing {
 	}
 
 	public void setIndexDirectory(FSDirectory indexDirectory) {
+<<<<<<< HEAD
 		IndexDirectory = indexDirectory;
 	}
 
 	public Directory getIndexDirectory() {
 		return IndexDirectory;
+=======
+		this.indexDirectory = indexDirectory;
+	}
+
+	public Directory getIndexDirectory() {
+		return indexDirectory;
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 	}
 
 	public void setIndexConfig(IndexWriterConfig indexConfig) {
@@ -143,6 +199,7 @@ public class Indexing {
 		return indexAnalyser;
 	}
 	
+<<<<<<< HEAD
 	/*
 	 * @param node est de type littéral ou ressources
 	 * @return la description complete du node c'est à dire les propriétés et les littraux auxquels l'asscociér
@@ -151,25 +208,60 @@ public class Indexing {
 	
 	
 	public String descripRessource(Statement stat){//cette fonction permet de décrire entierement une ressource en l'associant
+=======
+	 public Model getModel() {
+			return model;
+		}
+
+		public void setModel(Model model) {
+			this.model = model;
+		}
+	
+	/*
+	 * @param stat est dont on veut connaitre les  et les propriétés littéraux(directs et indirects)
+	 * @param propriete est la concaténation des propriétès séparées d'un espace
+	 * @param litteral est la concatenation des litteraux séparés d'un espace
+	 * @return la description complete du node c'est à dire les propriétés et les littraux auxquels l'asscociér
+	 */	
+	
+	public String descripRessource(Statement stat,String litteral){//cette fonction permet de décrire entierement une ressource en l'associant
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 		//à toutes les propriètes et littéraux qui la décrivent directement et indirectement.
 		//String description;// c'est la description de la ressource
 		
 		RDFNode node = stat.getObject();// on lit l'objet du statement
+<<<<<<< HEAD
 		
 		if(node.isLiteral())//si le noeud est litteral
 			return descrRessource+" "+ node.toString();//on prend la valeur du noeud
 		
 		
+=======
+		//RDFNode prt = stat.getPredicate();// on lit la propriete
+		
+		if(node.isLiteral())
+			return litteral+node.toString();//on prend la valeur du noeud
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 		else{//si le noeud est une ressource 
 			
 			Resource res = (Resource) node;//continuer à l'explorer
 			
+<<<<<<< HEAD
 			StmtIterator iter = model.listStatements(new SimpleSelector(res,null,true));//chercher tous statement
 			                                                                            //qui ont res pour ressource
 			
 			    do
 				 return  descrRessource+" "+descripRessource(iter.next());
 				 while(iter.hasNext());
+=======
+			StmtIterator iter = model.listStatements(new SimpleSelector(res,null,null,null));//chercher tous les statement
+		                                                    //qui ont res pour ressource
+			while(iter.hasNext())
+				
+				litteral =  descripRessource(iter.nextStatement(),litteral);	
+			
+			return litteral;
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 
 				}
 		
@@ -178,6 +270,7 @@ public class Indexing {
 	/*@param path est le chemin du fichier rdf 
 	 * @return retourne un modèle construit à partir du fichier rdf
 	 */
+<<<<<<< HEAD
 	public Model builModel(String path) throws IllegalArgumentException{
 		model = ModelFactory.createDefaultModel();
 		
@@ -190,6 +283,9 @@ public class Indexing {
 	
 	return model;
 	}
+=======
+	
+>>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 	
 
 }
