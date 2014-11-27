@@ -1,6 +1,7 @@
 package group.semantic.search.rdf;
 
 import jena.Test;
+import lucene.Indexing;
 
 /**
  * Hello world!
@@ -13,7 +14,8 @@ public class App
     {
         Test t = new Test();
         
-        t.essai();
-    	//System.out.println( "Hello World!" );
+
+       Indexing ind = new Indexing();
+       ind.builModel("/home/alassane/Downloads/genererRDFwithJENA.java");
     }
 }
