@@ -1,14 +1,5 @@
 package lucene;
 
-<<<<<<< HEAD
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
-import org.apache.lucene.analysis.core.SimpleAnalyzer;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryparser.classic.QueryParser;
-=======
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,29 +10,11 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
->>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
-<<<<<<< HEAD
-import org.apache.lucene.util.Version;
-
-/*
- * @author Alassane Ndiaye
- */
-public class Searching {
-/*
- * permet de lire l'index comme IndexWriter permet d'écrire dans l'index
- */
-	private IndexReader index;
-	
-/*
- * un ensemble de mots clés	
- */
-	private Set<String> setOfKeywords;  
-=======
 
 
 public class Searching {
@@ -65,31 +38,12 @@ public class Searching {
 	private HashMap<String,Set<Document> > keywordResources;
 	
 	private static final String champs[] =  {"propriete","litteral"} ;
->>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 
 	
 	/*
 	 * @param indexDirectory est le repertoire de l'index crée pendant la phase d'indexation
 	 * @param setOfKeywords est un ensemble de mots clés à rechercher dans l'index
 	 */
-<<<<<<< HEAD
-	public Searching(Directory indexDirectory,String setofKeywords )throws Exception{
-		
-		Query q = new QueryParser(Version.LUCENE_40,"propriete", new SimpleAnalyzer(Version.LUCENE_40)).parse("propA");
-		
-		IndexReader reader = DirectoryReader.open(indexDirectory);
-		IndexSearcher searcher = new IndexSearcher(reader);
-		 int hitsPerPage = 10;
-		TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
-		searcher.search(q, collector);
-		
-		ScoreDoc[] hits = collector.topDocs().scoreDocs;
-		
-		    
-		    reader.close();
-		
-		
-=======
 	public Searching(Directory indexDirectory,String setofKeywords)throws Exception{
 		keywordResources = new HashMap<String,Set<Document> >();//on instancie 
 		setOfKeywords = keywords(setofKeywords);// permet d'avoir l'ensemble des mots clés du motif de la recherche
@@ -120,7 +74,6 @@ public class Searching {
 			keywordResources.put(keyword,documents);	
 		}
 		    reader.close();		    
->>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 		
 	}
 
@@ -146,18 +99,9 @@ public class Searching {
 		
 		while(tokenizer.hasMoreTokens())
 			setOfKeywords.add(tokenizer.nextToken());//on ajoute chaque token à l'ensemble des mots-clé 
-<<<<<<< HEAD
-			
-			
-		
-		return setOfKeywords;
-		
-		
-=======
 					
 		return setOfKeywords;
 			
->>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 	}
 
 
@@ -165,17 +109,10 @@ public class Searching {
 		return setOfKeywords;
 	}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 	public void setSetOfKeywords(Set<String> setOfKeywords) {
 		this.setOfKeywords = setOfKeywords;
 	}
 
-<<<<<<< HEAD
-	
-=======
 	public HashMap<String, Set<Document>> getKeywordResource() {
 		return keywordResources;
 	}
@@ -184,5 +121,4 @@ public class Searching {
 	public void setKeywordResource(HashMap<String, Set<Document>> keywordResource) {
 		this.keywordResources = keywordResource;
 	}	
->>>>>>> 7a31a3a8f029582c32aa5dae5ea432ff67eba6fc
 }
