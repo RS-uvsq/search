@@ -93,7 +93,7 @@ public class ProjectFrame1 {
 		
 		menu.setMnemonic(KeyEvent.VK_F);
 		open.setMnemonic(KeyEvent.VK_N);
-		 action=new OpenFileChooserAction();
+		 action=new OpenFileChooserAction(f);
 		open.addActionListener(action);
 		exit.setMnemonic(KeyEvent.VK_C);
 	    exit.setToolTipText("Exit application");
@@ -189,7 +189,7 @@ public class ProjectFrame1 {
 	    		 for(i=0;i<val;i++)
 	    		 {
 	    			 Resource.add(tableModel.getValueAt(i,1).toString()); 
-	    			 System.out.println(tableModel.getValueAt(i,1).toString());
+	    			// System.out.println(tableModel.getValueAt(i,1).toString());
 	    		 }
 
 			    org.graphstream.graph.Graph graphfinal = new SingleGraph("GraphSteiner");
@@ -242,9 +242,14 @@ public class ProjectFrame1 {
 class OpenFileChooserAction implements ActionListener{
 	
 	private String pass;
+	JFrame fen;
 	public String getpath()
 	{
 		return pass;
+	}
+	public OpenFileChooserAction(JFrame f)
+	{
+		fen=f;
 	}
 	public void actionPerformed(ActionEvent e) {
 		
@@ -258,7 +263,7 @@ class OpenFileChooserAction implements ActionListener{
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers RDF", "rdf", "rdfs", "owl");
 		    fc.setFileFilter(filter);
 		    
-		int returnVal = fc.showOpenDialog(null);
+		int returnVal = fc.showOpenDialog(fen);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();	            	            
           // String  filegraphname = file.getPath().toString();
@@ -267,15 +272,15 @@ class OpenFileChooserAction implements ActionListener{
              /*********************************/
             
             //creation of the Jena's empty file
-            Model	model = ModelFactory.createDefaultModel();
-    		
+           
+            pass=file.getPath();
         	// FileManager to open the file 
-        	InputStream in = FileManager.get().open(DEFAULT_PATH+file.getName());
+        	InputStream in = FileManager.get().open(pass);
         	if (in == null) 
-        	    throw new IllegalArgumentException("Fichier: non trouvé");
-        	
-        	model.read(in, null);    	
-        	pass=file.getPath();
+        	  throw new IllegalArgumentException("Fichier: non trouvé");
+        	 pass=file.getPath();
+          	Model model = FileManager.get().loadModel(pass);
+        	System.out.println("NOM DU FICHIER :"+pass);
         	//creation of the index on the passed model
         	try {
         			group.semantic.search.rdf.App.index = new Indexing(model);

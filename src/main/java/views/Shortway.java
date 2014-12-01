@@ -38,7 +38,10 @@ public class Shortway {
 		    Iterator<RDFNode> ite=nod.iterator();
 		    while(ite.hasNext())
             {
-                nodes.add(ite.next());
+		    	RDFNode a=ite.next();
+                nodes.add(a);
+               // System.out.println("NODE:"+a.toString()+"------>"+a);
+               
             }
 		    Collection<Statement> h=graph.getEdges();
 	         Iterator<Statement> i=h.iterator();
@@ -54,7 +57,10 @@ public class Shortway {
 		   
 		  }
 	  
-	  
+	  public Map<String,RDFNode> mynode()
+	  {
+		  return node;
+	  }
 	  public List<RDFNode>Node()
 	  {
 		  return nodes;
@@ -65,7 +71,7 @@ public class Shortway {
 	  }
 	  public RDFNode getNode(String a)
 	  {
-		  
+		         
 		  return node.get(a) ;
 	  }
 	  

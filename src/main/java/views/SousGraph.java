@@ -7,16 +7,20 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.swing.JFrame;
+
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.Viewer;
+
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.FileManager;
+
 import edu.uci.ics.jung.graph.Graph;
 
 
@@ -51,21 +55,23 @@ public class SousGraph {
       
       Model model = FileManager.get().loadModel(lien);
       Graph<RDFNode, Statement> g = new JenaJungGraph(model);
-      
+      System.out.println("NOMBRE DE NOEUD :"+g.getEdgeCount());
       graph = new SingleGraph("Le plus court chemin");
       
       
       mode=new ArrayList<Node>();
       init(g);
       dijkstra = new Shortway(g);
+    // System.out.println("NODE:"+dijkstra.mynode());
       List<RDFNode>Resource=new ArrayList<RDFNode>();
       for(String vf: res)
       {
+    	  //System.out.println(vf+" "+"--YORICK---->"+dijkstra.getNode(vf));
          Resource.add(dijkstra.getNode(vf));
       }
       
       int i,j;
-      for(i=0;i<Resource.size();i++)
+     for(i=0;i<Resource.size();i++)
       {
          
          for(j=0;j<Resource.size();j++)
@@ -96,7 +102,7 @@ public class SousGraph {
          dijkstra = new Shortway(graph);
          dijkstra.execute(a);
          LinkedList<RDFNode> path = dijkstra.getPath(b);
-         System.out.println(path.size());
+         //System.out.println(path.size());
          
          
          int i;
@@ -121,7 +127,7 @@ public class SousGraph {
                   if(e1.isReified()){}
                   else
                   {
-                     System.out.println("taille:"+path.size());
+                     //System.out.println("taille:"+path.size());
                      CreateNoeud(path.get(i).toString(),graphfinal);
                      CreateNoeud(path.get(i+1).toString(),graphfinal);
                      Edge ab=graph1.addEdge(path.get(i).toString()+path.get(i+1).toString(), path.get(i).toString(),path.get(i+1).toString());
