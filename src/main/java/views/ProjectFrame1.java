@@ -41,6 +41,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 
+
+
 import lucene.Indexing;
 
 import org.apache.lucene.document.Document;
@@ -48,8 +50,11 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -63,17 +68,22 @@ public class ProjectFrame1 {
 	private JButton prec;	
 	private Icon precIcon;
 	private Icon suivIcon;
-	
+	private SousGraph GrapheSeiner;
 	private JScrollPane centerPanel = new JScrollPane();
 	private JPanel topPanel = new JPanel(new FlowLayout());
 	private JPanel mainPanel = new JPanel(new FlowLayout());
 	private JPanel mainPanelgrph = new JPanel(new FlowLayout());
 	
+	
+	 //MODEL A RECUPER POUR SPARQL
+	private Model ModelSparql;
+	
+	
 	private JMenuBar menuBar = new JMenuBar();	//barre de menu
 	
 	private JMenu menu = new JMenu("File");	
     private OpenFileChooserAction action;	  
-   
+    private JButton Graphinit=new JButton("Graph initial");
 	private ImageIcon iconNew = new ImageIcon("src\\icones\\open.png");;
 	private ImageIcon iconExit = new ImageIcon("src\\icones\\exit.png");;
 	private static JFrame f ;
@@ -178,7 +188,23 @@ public class ProjectFrame1 {
 	    topPanel.add(recherch);
 	    topPanel.add(suiv);
 	    topPanel.add(prec);
+	    topPanel.add(Graphinit);
 	    topPanel.add(updateGraph);
+Graphinit.addActionListener(new ActionListener()
+	    
+	    {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		 List<String>Resource=new ArrayList<String>();
+	    		int val=tableModel.getRowCount();
+	    		int i=0;
+			    
+				 String a=action.getpath();
+				  GrapheSeiner=new SousGraph(a,f);
+				 GrapheSeiner.GRAPHINIT();
+				
+				 
+			}
+	    });
 	    updateGraph.addActionListener(new ActionListener()
 	    
 	    {
@@ -198,9 +224,13 @@ public class ProjectFrame1 {
 				Resource.add("http://www.lio4.com");*/
 				
 				 String a=action.getpath();
-				SousGraph grp=new SousGraph(a,Resource,graphfinal,
+				  GrapheSeiner=new SousGraph(a,Resource,graphfinal,
 						 f);
-				  grp.execute();
+				 GrapheSeiner.execute();
+				 //MODEL A RECUPER POUR SPARQL
+				 ModelSparql=GrapheSeiner.getNewmodel();
+				 parcours();
+				 
 			}
 	    }
 	    		
@@ -228,8 +258,33 @@ public class ProjectFrame1 {
 	    f.setVisible(true);
 	    //f.setLocation(300,50);
 	    initMenu();
-	       
+	   
+	   
+	   
 	}
+	 public void parcours(){
+			StmtIterator iter =  ModelSparql.listStatements();
+
+			// affiche l'objet, le prédicat et le sujet de chaque déclaration
+			while (iter.hasNext()) {
+				
+				Statement stmt      = iter.nextStatement();  // obtenir la prochaine déclaration
+			  
+				Resource  subject   = stmt.getSubject();     // obtenir le sujet
+			    Property  predicate = stmt.getPredicate();   // obtenir le prédicat
+			    RDFNode   object    = stmt.getObject();      // obtenir l'objet
+			    
+			    System.out.print(subject.toString());
+			    System.out.print(" " + predicate.toString() + " ");
+			    if (object instanceof Resource) {
+			       System.out.print(object.toString());
+			    } else {
+			        // l'objet est un littéral
+			       System.out.print(" \"" + object.toString() + "\"");
+			    }
+			    System.out.println(" .");
+			}
+		}
 		
 }
 
