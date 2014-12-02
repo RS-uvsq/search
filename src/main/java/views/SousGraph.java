@@ -1,7 +1,13 @@
 package views;
 
 
+
+
 import java.awt.Component;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,7 +83,7 @@ public class SousGraph {
        chemin=new HashSet<List<String>>();
       System.out.println("NOMBRE DE NOEUD :"+g.getEdgeCount());
       graph = new SingleGraph("Le plus court chemin");
-     
+      
        newmodel = ModelFactory.createDefaultModel();
       busyNode=new HashMap<RDFNode,Integer>();
       mode=new ArrayList<Node>();
@@ -130,6 +136,14 @@ public class SousGraph {
 	      fenetre.setVisible(true);
 	   
    }
+   public void ecrireFileRDF(String fichier){
+
+		 try (OutputStream out = new BufferedOutputStream(new FileOutputStream(fichier),1024)) {
+			 newmodel.write(out);
+			        } catch (IOException e) {
+		        e.printStackTrace();
+			    }
+	}
    public void initGRPAH(Graph<RDFNode, Statement> g)
    {
       Collection<Statement> h=g.getEdges();

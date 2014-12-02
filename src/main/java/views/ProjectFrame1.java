@@ -43,6 +43,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 
+
+
+
 import lucene.Indexing;
 
 import org.apache.lucene.document.Document;
@@ -73,13 +76,21 @@ public class ProjectFrame1 {
 	private JPanel topPanel = new JPanel(new FlowLayout());
 	private JPanel mainPanel = new JPanel(new FlowLayout());
 	private JPanel mainPanelgrph = new JPanel(new FlowLayout());
+	  
 	
 	
-	 //MODEL A RECUPER POUR SPARQL
+   // Lien  du fichier RDF  DE L'ARBRE DE  STEINER
+	private String LienFichierRDF;
+	
+	
+	
+	 //MODEL RDF de L'ARBRE DE  STEINER
 	private Model ModelSparql;
 	
 	
-	private JMenuBar menuBar = new JMenuBar();	//barre de menu
+	
+	//barre de menu
+	private JMenuBar menuBar = new JMenuBar();	
 	
 	private JMenu menu = new JMenu("File");	
     private OpenFileChooserAction action;	  
@@ -89,11 +100,21 @@ public class ProjectFrame1 {
 	private static JFrame f ;
 	private JMenuItem open= new JMenuItem("New",iconNew);					  
 	private JMenuItem exit = new JMenuItem("Exit", iconExit);
-						
-	private JTable tableau; 				//tableau pourr visualiser les resultats de la recherche
-	static JTableRessourceModel tableModel;  //modele de donnees de notre table
 	
-	private ChampTexte recherch;    //champs pour la recherche	
+	
+	
+	
+	//tableau pourr visualiser les resultats de la recherche					
+	private JTable tableau; 	
+	
+	
+	 //modele de donnees de notre table
+	static JTableRessourceModel tableModel; 
+	
+	
+	
+	 //champs pour la recherche	
+	private ChampTexte recherch;   
 	
 	private JLabel recherchLabel;	
 	private	JButton updateGraph;
@@ -110,7 +131,9 @@ public class ProjectFrame1 {
 	    exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,ActionEvent.CTRL_MASK));
 	    exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-					//quitter l'application
+			
+				//quitter l'application
+				
 				System.exit(0);
 			}
 	    });
@@ -120,6 +143,7 @@ public class ProjectFrame1 {
 	    menu.add(exit);
 	        
 	   //positionnment de la barre de menu
+	    
 	    menuBar.add(menu);
 	    f.setJMenuBar(menuBar);		
 	}//end initMenu
@@ -198,7 +222,7 @@ Graphinit.addActionListener(new ActionListener()
 	    		int val=tableModel.getRowCount();
 	    		int i=0;
 			    
-				 String a=action.getpath();
+				 String a=action.getpath()[0];
 				  GrapheSeiner=new SousGraph(a,f);
 				 GrapheSeiner.GRAPHINIT();
 				
@@ -223,13 +247,22 @@ Graphinit.addActionListener(new ActionListener()
 				/*Resource.add("http://www.lio.com");
 				Resource.add("http://www.lio4.com");*/
 				
-				 String a=action.getpath();
+				 String a=action.getpath()[0];
 				  GrapheSeiner=new SousGraph(a,Resource,graphfinal,
 						 f);
 				 GrapheSeiner.execute();
 				 //MODEL A RECUPER POUR SPARQL
 				 ModelSparql=GrapheSeiner.getNewmodel();
 				 parcours();
+				 
+				 String split=action.getpath()[1];
+				 
+				 LienFichierRDF=split+"out.rdf";
+				 System.out.println("liens----->"+a+" "+"split:"+ LienFichierRDF);
+				 
+				 //création du fichier rdf du sous graph
+				 
+				 GrapheSeiner.ecrireFileRDF( LienFichierRDF);
 				 
 			}
 	    }
@@ -297,11 +330,15 @@ Graphinit.addActionListener(new ActionListener()
 class OpenFileChooserAction implements ActionListener{
 	
 	private String pass;
+	private  File file;
+	String  pass1;
 	JFrame fen;
-	public String getpath()
+	public String[] getpath()
 	{
-		return pass;
+		String[] str={pass,pass1};
+		return str;
 	}
+	
 	public OpenFileChooserAction(JFrame f)
 	{
 		fen=f;
@@ -320,7 +357,7 @@ class OpenFileChooserAction implements ActionListener{
 		    
 		int returnVal = fc.showOpenDialog(fen);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();	            	            
+            file = fc.getSelectedFile();	            	            
           // String  filegraphname = file.getPath().toString();
             /*********************************/
              /* applying the indexing method  */
@@ -333,7 +370,11 @@ class OpenFileChooserAction implements ActionListener{
         	InputStream in = FileManager.get().open(pass);
         	if (in == null) 
         	  throw new IllegalArgumentException("Fichier: non trouvé");
+        	
         	 pass=file.getPath();
+        	 
+        	pass1=file.getPath().replaceAll(file.getName(),"");
+        	
           	Model model = FileManager.get().loadModel(pass);
         	System.out.println("NOM DU FICHIER :"+pass);
         	//creation of the index on the passed model

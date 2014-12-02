@@ -1,33 +1,25 @@
 <rdf:RDF
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#" > 
- 
-  <rdf:Description rdf:about="http://www.lio.com">
-    <vcard:Family>ndiaye</vcard:Family>
-         <vcard:N rdf:resource="http://www.lio2.com"/>
-         <vcard:Given>alassane</vcard:Given>
-          <vcard:FN>alassane ndiaye</vcard:FN>
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" > 
+  <rdf:Description rdf:about="http://data.linkedmdb.org/resource/movie/film_company">
+    <rdf:type>http://data.linkedmdb.org/resource/film_company/40</rdf:type>
+    <rdf:type>http://data.linkedmdb.org/resource/film_company/323</rdf:type>
+    <rdf:type>http://data.linkedmdb.org/resource/film_company/70</rdf:type>
+    <rdf:type>http://data.linkedmdb.org/resource/film_company/184</rdf:type>
+    <rdf:type>http://data.linkedmdb.org/resource/film_company/112</rdf:type>
   </rdf:Description>
-  
-  <rdf:Description rdf:about="http://www.mehdi.com">
-  <vcard:N rdf:resource="http://www.lio.com"/>
-  <vcard:FN>l0</vcard:FN>
+  <rdf:Description rdf:about="http://data.linkedmdb.org/resource/film_company/69">
+    <rdf:type>http://data.linkedmdb.org/resource/movie/film_company</rdf:type>
   </rdf:Description>
-   
-   
-   
-   <rdf:Description rdf:about="http://www.lio2.com">
- <vcard:FN>l4 l1</vcard:FN>
-  <vcard:N rdf:resource="http://www.lio3.com"/>
+  <rdf:Description rdf:about="http://data.linkedmdb.org/resource/film_company/154">
+    <rdf:type>http://data.linkedmdb.org/resource/movie/film_company</rdf:type>
   </rdf:Description>
-  
-   <rdf:Description rdf:about="http://www.lio3.com">
- <vcard:FN>l5</vcard:FN>
-  <vcard:N rdf:resource="http://www.lio4.com"/>
+  <rdf:Description rdf:about="http://data.linkedmdb.org/resource/film_company/208">
+    <rdf:type>http://data.linkedmdb.org/resource/movie/film_company</rdf:type>
   </rdf:Description>
-  
-   <rdf:Description rdf:about="http://www.lio4.com">
- <vcard:FN>alassane</vcard:FN>
+  <rdf:Description rdf:about="http://data.linkedmdb.org/resource/film_company/238">
+    <rdf:type>http://data.linkedmdb.org/resource/movie/film_company</rdf:type>
   </rdf:Description>
- 
+  <rdf:Description rdf:about="http://data.linkedmdb.org/resource/film_company/39">
+    <rdf:type>http://data.linkedmdb.org/resource/movie/film_company</rdf:type>
+  </rdf:Description>
 </rdf:RDF>
