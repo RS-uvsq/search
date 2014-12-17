@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -46,11 +47,28 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 
+
+
+
+
+
+
+
+
+
 import lucene.Indexing;
 
 import org.apache.lucene.document.Document;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -100,7 +118,6 @@ public class ProjectFrame1 {
 	private static JFrame f ;
 	private JMenuItem open= new JMenuItem("New",iconNew);					  
 	private JMenuItem exit = new JMenuItem("Exit", iconExit);
-	
 	
 	
 	
@@ -229,8 +246,7 @@ Graphinit.addActionListener(new ActionListener()
 				 
 			}
 	    });
-	    updateGraph.addActionListener(new ActionListener()
-	    
+	    updateGraph.addActionListener(new ActionListener()	    
 	    {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		 List<String>Resource=new ArrayList<String>();
@@ -249,11 +265,11 @@ Graphinit.addActionListener(new ActionListener()
 				
 				 String a=action.getpath()[0];
 				  GrapheSeiner=new SousGraph(a,Resource,graphfinal,
-						 f);
-				 GrapheSeiner.execute();
+						 f,false);
+				 GrapheSeiner.exec();
 				 //MODEL A RECUPER POUR SPARQL
 				 ModelSparql=GrapheSeiner.getNewmodel();
-				 parcours();
+				
 				 
 				 String split=action.getpath()[1];
 				 
@@ -264,12 +280,93 @@ Graphinit.addActionListener(new ActionListener()
 				 
 				 GrapheSeiner.ecrireFileRDF( LienFichierRDF);
 				 
-			}
-	    }
+				 
+				 //***********************************************************************//
+				 //***********************  SPARQL QUERIES *******************************//
+				 //***********************************************************************//
+				 
+				// String queryString = "CONSTRUCT {?subj ?prop ?obj }"
+				// 					+ " WHERE { ?subj a ?obj "
+				// 					+ "FILTER (?obj rdfs:subClassOf* ?subj.)}";
+				 
+				/* String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "        
+						    		+"PREFIX owl:  <http://www.w3.org/2002/07/owl#> "
+						    		+"PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#> "
+						    		+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+						    		+"PREFIX film: <http://data.linkedmdb.org/directory/film_company#>"
+						 			+"CONSTRUCT { ?sub ?prop ?y }"
+						    		+"WHERE { ?sub ?prop ?y }";
+				 					//+ "WHERE { ?t rdfs:subClassOf* film:Class . ?y rdf:type ?t }";
+				 					 
+				 	*/
+				 					 
+				 String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "        
+				    		+"PREFIX owl:  <http://www.w3.org/2002/07/owl#> "
+				    		+"PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#> "
+				    		+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+				    		//+"PREFIX film: <http://data.linkedmdb.org/directory/film_company#>"
+				 			+"CONSTRUCT { ?sub rdf:type  ?obj }"
+				 						 //+ "?sub   rdf:type owl:Class }"
+				    		+"WHERE {?sub   rdf:type ?obj }";
+						 
+			 /*String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "        
+			    		+"PREFIX owl:  <http://www.w3.org/2002/07/owl#> "
+			    		+"PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#> "
+			    		+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+			    		//+"PREFIX film: <http://data.linkedmdb.org/directory/#>"
+			    		+"SELECT ?y"
+			    		+"WHERE {?y rdf:type ?x }";
+			    		//+"WHERE {?t rdfs:subClassOf* film:Class . ?y rdf:type ?t}";
+			 */
+				 Query query = QueryFactory.create(queryString) ;
+				 QueryExecution qexec = QueryExecutionFactory.create(query, ModelSparql);			 
+				 				 
+				 try {					  
+					  	//ResultSet results = qexec.execSelect();
+					 	Model resultModel = qexec.execConstruct() ;		
+					 	org.graphstream.graph.Graph graphsparc = new SingleGraph("GraphSparql");
+					 	SousGraph GrapheSparql=new SousGraph(graphsparc, f,resultModel,true);
+					  	//System.out.println("dans try"+results.getRowNumber());
+					  	
+					  	//output query result
+					  	System.out.println("dans results");
+					  	//ResultSetFormatter.out(System.out, results, query);
+					  	
+					 	/*for ( ; results.hasNext() ; ){
+					 		
+					 		QuerySolution soln = results.nextSolution() ;					 		
+					 		
+					 		System.out.println("soln: "+soln.toString());
+					 		System.out.println("test = "+soln.varNames().next());
+					 		RDFNode n = soln.get(); //soln.get("x");
+					 		if ( n.isLiteral() ){
+					 	          ((Literal)n).getLexicalForm();
+					 	          System.out.println("je suis Literal");
+					 		}
+					 	    if ( n.isResource() )
+					 	    {
+					 	         Resource r = (Resource)n ;
+					 	        System.out.println("je suis ressource");
+					 	          if ( ! r.isAnon() )
+					 	          {
+					 	            r.getURI();
+					 	            System.out.println("je suis noeud anonyme");
+					 	          }
+					 	    }
+					 	}*/
+				 
+					 	
+				  } 
+				  finally{					  
+					  qexec.close();
+				  }
+				 
+				 
+					}//end actionPerformed
+	    		}//end actionListener updateGraph    		
 	    		
 	    		
-	    		
-	    		);
+	    );
 	   
 	    
 	    centerPanel.setViewportView(tableau);

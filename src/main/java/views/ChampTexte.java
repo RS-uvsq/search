@@ -1,5 +1,6 @@
 package views;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import javax.swing.event.DocumentListener;
 import lucene.Searching;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.store.FSDirectory;
 
 /**********************************************************************************/
 /*****       CLASSE QUI CONSTRUIT NOTRE ZONE DE RECHERCHE   ***********************/
@@ -49,36 +51,45 @@ public class ChampTexte extends JTextField implements DocumentListener {
 	}
 
 	public void insertUpdate(DocumentEvent arg0) {
-		refreshSearch();
+		try {
+			refreshSearch();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void removeUpdate(DocumentEvent arg0) {
-		refreshSearch();
+		try {
+			refreshSearch();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
 	 * effectue la recherche dans l'index à partir de la chaine actuelle entrée dans le champs de recheerche
+	 * @throws Exception 
 	 */
-	void refreshSearch(){
+	void refreshSearch() throws Exception{
 				
 		//recupération du texte-> mots clé à chercher
 		String motif = this.getText();
 		HashMap<String,Set<Document>> resultats= new HashMap<String,Set<Document>>();
 		
-		//lancement de la recherche			
-		try {
-			Searching search= new Searching(group.semantic.search.rdf.App.index.getIndexDirectory(),motif);
-			//System.out.print(search.getKeywordResource().get(new String("l2")).iterator().next().get("ressource"));
+		//lancement recherche
+		File indexFile = new File("lucene");
+		if(indexFile.listFiles().length == 0) throw new Exception("l'index est vide. Veuillez en créer un!");
+		FSDirectory indexDirectory = FSDirectory.open(indexFile);
+		
+		
+		Searching search= new Searching(indexDirectory,motif);
 			
-			//recuperation des eventuels documents trouvés
-			resultats= search.getKeywordResource();	
+		//recuperation des eventuels documents trouvés
+		resultats= search.getKeywordResource();	
 			
-			System.out.println(motif+": result ds champ texte "+resultats);
-			
-		} 
-    	catch (Exception e1) {			
-			e1.printStackTrace();
-		}
+		//System.out.println(motif+": result ds champ texte "+resultats);
 		
 		//traitement et affichage du resultat sur le tableau
 		//recharger l'ancien model de la table par le nouveau 

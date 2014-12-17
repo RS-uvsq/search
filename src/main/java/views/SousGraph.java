@@ -51,6 +51,7 @@ public class SousGraph {
    private  Model model;
    private  Model newmodel;
    private List<Node> mode;
+   private boolean acces;
    List<String>res;
    JFrame fenetre;
    List<RDFNode> Ressource;
@@ -63,21 +64,30 @@ public class SousGraph {
       this.lien=mot;
       this.fenetre=fenetre;
    }
-   public SousGraph(String mot,List<String>Resource,org.graphstream.graph.Graph graphfinal, JFrame fenetre)
+   public SousGraph(String mot,List<String>Resource,org.graphstream.graph.Graph graphfinal, JFrame fenetre,boolean affiche)
    {
-      this.lien=mot;
+      this.lien= mot;
       this.res=Resource;
       this.graphfinal=graphfinal;
       this.fenetre=fenetre;
+      acces=affiche;
+      model = FileManager.get().loadModel(lien);
    }
    
-   
-   
-   public void execute()
+   public SousGraph(org.graphstream.graph.Graph graphfinal, JFrame fenetre,Model model,boolean affiche)
    {
-      
-      
-       model = FileManager.get().loadModel(lien);
+      this.graphfinal=graphfinal;
+      this.fenetre=fenetre;
+      acces=affiche;
+      System.out.println(" sparq version: "+model.size());
+      execute( model);
+   }
+   public void exec()
+   {
+	   execute( model);
+   }
+   public void execute(Model model)
+   {      
      
        g = new JenaJungGraph(model);
        chemin=new HashSet<List<String>>();
@@ -89,32 +99,39 @@ public class SousGraph {
       mode=new ArrayList<Node>();
       init(g);
       dijkstra = new Shortway(g);
-    // System.out.println("NODE:"+dijkstra.mynode());
+      // System.out.println("NODE:"+dijkstra.mynode());
       List<RDFNode>Resource=new ArrayList<RDFNode>();
-      for(String vf: res)
+      if(!acces)
       {
-    	 // System.out.println(vf+" "+"--YORICK---->"+dijkstra.getNode(vf));
-         Resource.add(dijkstra.getNode(vf));
-      }
-      
-      int i,j;
-     for(i=0;i<Resource.size();i++)
-      {
-         
-         for(j=0;j<Resource.size();j++)
-         {
-            
-            chemin(Resource.get(i),Resource.get(j),graph);
-         }
+	      for(String vf: res)
+	      {
+	    	 // System.out.println(vf+" "+"--YORICK---->"+dijkstra.getNode(vf));
+	         Resource.add(dijkstra.getNode(vf));
+	      }
+	      
+	      int i,j;
+	     for(i=0;i<Resource.size();i++)
+	      {
+	         
+	         for(j=0;j<Resource.size();j++)
+	         {
+	            
+	            chemin(Resource.get(i),Resource.get(j),graph);
+	         }
+	      }
       }
     // parcours();
      //System.out.println("NOMBRE DE STATEMENT:"+ newmodel.size());
-      Viewer viewer = new Viewer(graphfinal, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+     if(acces)
+     {
+    	 
+      Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
       viewer.enableAutoLayout();
       View view = viewer.addDefaultView(false);
       
       fenetre.add((Component) view);
       fenetre.setVisible(true);
+     }
       
    }
    
@@ -312,8 +329,11 @@ public class SousGraph {
          RDFNode destination= g.getDest(s);
          CreateNoeud(source.toString(),graph);
          CreateNoeud(destination.toString(),graph);
-        // CreateEdge(j+"",source.toString(),destination.toString(),s.getPredicate().toString());
-         j++;
+         if(acces)
+         {
+	        CreateEdge(j+"",source.toString(),destination.toString(),s.getPredicate().toString(),graph);
+	         j++;
+         }
          
       }
       graphfinal.addAttribute("ui.quality");

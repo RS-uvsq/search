@@ -42,7 +42,7 @@ public class QueryBuild {//cette classe permet de construire une requete à part
 		if(listMot.size()==3){
 			if(listMot.get(0).equals("film"))
 				requete = parser.parse("(film AND "+listMot.get(1)+" AND "+listMot.get(2)+")^5"//requete sur 3 mots liés par l'opérateur AND
-					+ " (((film AND "+listMot.get(1)+") OR (film AND "+listMot.get(2)+"))^5 "//2 requetes liées par l'opérateur OR
+					+ " (((film AND "+listMot.get(1)+") OR (film AND "+listMot.get(2)+"))^2 "//2 requetes liées par l'opérateur OR
 							+ "(film OR "+listMot.get(1)+" OR "+listMot.get(2)+"))");	//3 requetes.chaque requet constitué d'un seul 
 		}
 		

@@ -41,7 +41,7 @@ public class Searching {
 	 * @param indexDirectory est le repertoire de l'index crée pendant la phase d'indexation
 	 * @param setOfKeywords est un ensemble de mots clés à rechercher dans l'index
 	 */
-	public Searching(Directory indexDirectory,String requete)throws Exception{
+	public Searching(Directory indexDirectory,String motif)throws Exception{
 		keywordResources = new HashMap<String,Set<Document> >();//on instancie 
 		Set<Document> documents ;//ensemble de documents associés à un mot-clé
 		
@@ -52,29 +52,21 @@ public class Searching {
 			documents = new HashSet<Document>();
 			//QueryParser parser = new QueryParser("description", new StandardAnalyzer());//la requete porte sur les champs propriete et litteral
 		    //    String requete  = QueryBuilder(setOfKeywords);// retourne la requête
-		      String word = requete;
-		
-		    QueryParser parser = new QueryParser("description", new StandardAnalyzer());//la requete porte sur la description de la ressource
-			Query mot = parser.parse(requete);
-			
-		
-			
+		    QueryBuild queryBuild = new QueryBuild(3,motif);
 			IndexSearcher searcher = new IndexSearcher(reader);						
 
 			int hitsPerPage = 10;	
 			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, true);
-			searcher.search(mot, collector);
+			searcher.search(queryBuild.getRequete(), collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
 			for(int i= 0 ; i < hits.length ; ++i) {
 			    int docId = hits[i].doc;
 			    Document doc = searcher.doc(docId);
-			    documents.add(doc);
-			   	
+			    documents.add(doc);			   	
 		   }
-			 keywordResources.put(word,documents);
-			
+		   keywordResources.put(motif,documents);			
 		
-		    reader.close();		    
+		   reader.close();		    
 		
 	}
 
