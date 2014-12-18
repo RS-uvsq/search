@@ -73,7 +73,8 @@ public class ChampTexte extends JTextField implements DocumentListener {
 	 * @throws Exception 
 	 */
 	void refreshSearch() throws Exception{
-				
+		
+		try{
 		//recupération du texte-> mots clé à chercher
 		String motif = this.getText();
 		HashMap<String,Set<Document>> resultats= new HashMap<String,Set<Document>>();
@@ -103,7 +104,7 @@ public class ChampTexte extends JTextField implements DocumentListener {
 		/**
 		 * version avec ProjectFrame1
 		 */
-		ProjectFrame1.tableModel.setKeyDocs(resultats);
+		ProjectFrame.tableModel.setKeyDocs(resultats);
 		
 		
 		/** on informe la table que les données du modèle ont changé
@@ -111,6 +112,10 @@ public class ChampTexte extends JTextField implements DocumentListener {
 		 */
 		//ProjectFrame.modelJTable.fireTableDataChanged();
 		
-		ProjectFrame1.tableModel.fireTableDataChanged();		
+		ProjectFrame.tableModel.fireTableDataChanged();	
+		}
+		catch(NullPointerException e){
+		}
+		
 	}
 }

@@ -1,4 +1,4 @@
-package views;
+﻿package views;
 
 
 
@@ -46,86 +46,94 @@ public class SousGraph {
    private  org.graphstream.graph.Graph graphinit;
    private  org.graphstream.graph.Graph graphfinal;
    private Graph<RDFNode, Statement> g;
+   private List<Collection<Statement>> Statements;
    private Set<List<String>> chemin;
    private  Map<RDFNode, Integer> busyNode;
    private  Model model;
    private  Model newmodel;
    private List<Node> mode;
-   private boolean acces;
+   List<RDFNode>Resource;
    List<String>res;
    JFrame fenetre;
    List<RDFNode> Ressource;
    String lien;
    Shortway dijkstra;
-   
+   boolean f;
    
    public SousGraph(String mot,JFrame fenetre)
    {
       this.lien=mot;
       this.fenetre=fenetre;
    }
-   public SousGraph(String mot,List<String>Resource,org.graphstream.graph.Graph graphfinal, JFrame fenetre,boolean affiche)
+   public SousGraph(String mot,List<String>Resource,org.graphstream.graph.Graph graphfinal, JFrame fenetre,boolean h)
    {
-      this.lien= mot;
+      this.lien=mot;
+      f=h;
       this.res=Resource;
       this.graphfinal=graphfinal;
       this.fenetre=fenetre;
-      acces=affiche;
       model = FileManager.get().loadModel(lien);
    }
-   
    public SousGraph(org.graphstream.graph.Graph graphfinal, JFrame fenetre,Model model,boolean affiche)
    {
       this.graphfinal=graphfinal;
       this.fenetre=fenetre;
-      acces=affiche;
+      f=affiche;
       System.out.println(" sparq version: "+model.size());
       execute( model);
    }
    public void exec()
    {
-	   execute( model);
+	   execute(model);
    }
+   
    public void execute(Model model)
-   {      
+   {
+      
+      
+      
      
        g = new JenaJungGraph(model);
+       
        chemin=new HashSet<List<String>>();
-      System.out.println("NOMBRE DE NOEUD :"+g.getEdgeCount());
+     // System.out.println("NOMBRE DE NOEUD :"+g.getEdgeCount());
       graph = new SingleGraph("Le plus court chemin");
       
        newmodel = ModelFactory.createDefaultModel();
       busyNode=new HashMap<RDFNode,Integer>();
       mode=new ArrayList<Node>();
       init(g);
+      
+      
       dijkstra = new Shortway(g);
-      // System.out.println("NODE:"+dijkstra.mynode());
-      List<RDFNode>Resource=new ArrayList<RDFNode>();
-      if(!acces)
+    // System.out.println("NODE:"+dijkstra.mynode());
+      Resource=new ArrayList<RDFNode>();
+      if(f)
       {
-	      for(String vf: res)
-	      {
-	    	 // System.out.println(vf+" "+"--YORICK---->"+dijkstra.getNode(vf));
-	         Resource.add(dijkstra.getNode(vf));
-	      }
-	      
-	      int i,j;
-	     for(i=0;i<Resource.size();i++)
-	      {
-	         
-	         for(j=0;j<Resource.size();j++)
-	         {
-	            
-	            chemin(Resource.get(i),Resource.get(j),graph);
-	         }
-	      }
+      for(String vf: res)
+      {
+    	  //System.out.println(vf+" "+"--YORICK---->"+dijkstra.getNode(vf));
+    	  Resource.add(dijkstra.getNode(vf));
       }
+      
+      int i,j;
+      
+     for(i=0;i<Resource.size();i++)
+      {
+         
+         for(j=0;j<Resource.size();j++)
+         {
+            
+            chemin(Resource.get(i),Resource.get(j),graph);
+         }
+      }
+   }
+     ajoutarreteInstance();
     // parcours();
      //System.out.println("NOMBRE DE STATEMENT:"+ newmodel.size());
-     if(acces)
+     if(f)
      {
-    	 
-      Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+      Viewer viewer = new Viewer(graphfinal, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
       viewer.enableAutoLayout();
       View view = viewer.addDefaultView(false);
       
@@ -136,8 +144,54 @@ public class SousGraph {
    }
    
    
+  
    //Renvoie le grpah initial
   
+   public  void  ajoutarreteInstance()
+   {
+        int i;
+        Statements= new ArrayList<Collection<Statement>>();
+	   for(i=0;i<Resource.size();i++)
+	      {
+	       
+	       
+	        Collection<Statement> a=g.getOutEdges(Resource.get(i));
+	        Iterator<Statement> d=a.iterator();
+	        while(d.hasNext())
+	        {
+	        	 Statement f=d.next();
+	       
+	        	 try
+	             {
+	        		 
+	        		String v=f.getObject().toString();
+	        		 String  t=transform(v,"http");
+	        	      if(t.isEmpty()){t=transform(v,"#");}
+	                Node e=graphfinal.addNode(v);
+	              
+              	    
+	                e.setAttribute("ui.label",t);
+	                Edge ab1=graphfinal.addEdge(f.getSubject().toString()+v,f.getSubject().toString(),v,true);
+	                String h=f.getPredicate().toString();
+              	  String[] pass=h.split("#");
+                    String t2=pass[1]; 
+                   
+	                ab1.setAttribute("ui.label",t2);
+	               
+	             }
+	             catch(Exception e){
+	              System.out.println("Noeud:"+i+" existant déjà");
+	             } 
+	        }
+	      }
+	  
+	      
+	       
+	        
+          
+	   //System.out.println("STATEMENTTTTTTTTTTTTTTTTT:"+Statements);
+	   
+   }
    public  void GRAPHINIT()
    {
 	   model = FileManager.get().loadModel(lien);
@@ -160,6 +214,7 @@ public class SousGraph {
 			        } catch (IOException e) {
 		        e.printStackTrace();
 			    }
+		 
 	}
    public void initGRPAH(Graph<RDFNode, Statement> g)
    {
@@ -171,6 +226,8 @@ public class SousGraph {
       {
          Statement s=i.next();
          
+       
+       
          RDFNode source= g.getSource(s);
          RDFNode destination= g.getDest(s);
          CreateNoeud(source.toString(),graphinit);
@@ -185,7 +242,7 @@ public class SousGraph {
       
       " graph {fill-color: #D8BFD8;}"+
       "edge{shape: L-square-line; fill-color:white ;arrow-size: 5px, 10px;size:2px;}"+
-      "node {text-color:yellow;shadow-mode:plain;size: 20px, 21px; shape: box;fill-color:red;stroke-mode: plain;stroke-color: yellow;}"
+      "node {text-color:black;shadow-mode:plain;size: 20px, 21px; shape: box;fill-color:red;stroke-mode: plain;stroke-color: black;}"
       
       );
      
@@ -251,11 +308,21 @@ public class SousGraph {
                 	          CreateNoeud(path.get(i).toString(),graphfinal);
                               CreateNoeud(path.get(i+1).toString(),graphfinal);
                               Edge ab=graph1.addEdge(path.get(i).toString()+path.get(i+1).toString(), path.get(i).toString(),path.get(i+1).toString());
+                              
+                              
+                              
+                              //Construction 
                               Edge ab1=graphfinal.addEdge(path.get(i).toString()+path.get(i+1).toString(), path.get(i).toString(),path.get(i+1).toString(),true);
                               
-                             
-                              ab.setAttribute("ui.label",e1.getPredicate().toString());
-                              ab1.setAttribute("ui.label",e1.getPredicate().toString());
+                              String  t=transform(e1.getPredicate().toString(),"http"),t1="";
+                              String h="";
+
+                              h=e1.getPredicate().toString();
+                        	  String[] pass=h.split("#");
+                              String t2=pass[1]; 
+                              ab.setAttribute("ui.label",t2);
+                              ab1.setAttribute("ui.label",t2);
+                              
                               
                               //Construction du NOUVEAU MODEL
                               String resource    =path.get(i).toString();
@@ -265,7 +332,7 @@ public class SousGraph {
           
                 	          }
                 	         else
-                	        	 System.out.println("L'AJOUT imposible"); 	 
+                	        	 System.out.println("AJOUT imposible"); 	 
                     
                  // }
                      
@@ -298,20 +365,19 @@ public class SousGraph {
 		while (iter.hasNext()) {
 			
 			Statement stmt      = iter.nextStatement();  // obtenir la prochaine déclaration
-		  
+		   
 			Resource  subject   = stmt.getSubject();     // obtenir le sujet
 		    Property  predicate = stmt.getPredicate();   // obtenir le prédicat
 		    RDFNode   object    = stmt.getObject();      // obtenir l'objet
-		    
-		    System.out.print(subject.toString());
-		    System.out.print(" " + predicate.toString() + " ");
+		   // System.out.print(subject.toString());
+		    System.out.print(" " + " ");
 		    if (object instanceof Resource) {
-		       System.out.print(object.toString());
+		       System.out.print("");
 		    } else {
 		        // l'objet est un littéral
-		       System.out.print(" \"" + object.toString() + "\"");
+		       System.out.print(" \"" + "\"");
 		    }
-		    System.out.println(" .");
+		    System.out.println(" ");
 		}
 	}
    
@@ -329,11 +395,8 @@ public class SousGraph {
          RDFNode destination= g.getDest(s);
          CreateNoeud(source.toString(),graph);
          CreateNoeud(destination.toString(),graph);
-         if(acces)
-         {
-	        CreateEdge(j+"",source.toString(),destination.toString(),s.getPredicate().toString(),graph);
-	         j++;
-         }
+        // CreateEdge(j+"",source.toString(),destination.toString(),s.getPredicate().toString());
+         j++;
          
       }
       graphfinal.addAttribute("ui.quality");
@@ -342,7 +405,7 @@ public class SousGraph {
       
       " graph {fill-color: #D8BFD8;}"+
       "edge{shape: L-square-line; fill-color:white ;arrow-size: 5px, 10px;size:2px;}"+
-      "node {text-color:yellow;shadow-mode:plain;size: 20px, 21px; shape: box;fill-color:red;stroke-mode: plain;stroke-color: yellow;}"
+      "node {text-color:black;shadow-mode:plain;size: 20px, 21px; shape: box;fill-color:red;stroke-mode: plain;stroke-color: black;}"
       
       );
       graph.addAttribute("ui.quality");
@@ -351,28 +414,102 @@ public class SousGraph {
       
       " graph {fill-color: #D8BFD8;}"+
       "edge{shape: L-square-line; fill-color:white ;arrow-size: 5px, 10px;size:2px;}"+
-      "node {text-color:yellow;shadow-mode:plain;size: 20px, 21px; shape: box;fill-color:red;stroke-mode: plain;stroke-color: yellow;}"
+      "node {text-color:black;shadow-mode:plain;size: 20px, 21px; shape: box;fill-color:red;stroke-mode: plain;stroke-color: black;}"
       
       );
    }
    public void CreateEdge(String nom,String source,String Dest,String name,org.graphstream.graph.Graph graph)
    {
       
+	   
+	  String  t=transform(name,"#");
+      // if(t==null){t=transform(name,"#");}
       Edge ab=graph.addEdge(nom,source,Dest,true);
-      ab.setAttribute("ui.label",name);
+      ab.setAttribute("ui.label",t);
+   }
+   public String transform(String c,String delimit)
+   {
+	   
+	   if(delimit.equals("http"))
+	   {
+		   String[] pass=c.split(delimit);
+		   String t =""; 
+		   try
+		      {
+		    	
+		    	
+			   t =pass[0];
+			   t=t.replaceAll("[^\\w]","");
+			   return t;
+		    	
+		    	
+		    	
+		        
+		         
+		      }
+		      catch(Exception e){
+		      return c;
+		      }
+	   }
+	   
+		  
+	   else
+	   {
+		   String[] pass=c.split(delimit);
+		   String t="";
+		   try
+		      {
+		    	
+		    	
+			 
+			   t=pass[1]; 
+			  
+			   return t;
+		    	
+		    	
+		    	
+		        
+		         
+		      }
+		      catch(Exception e){
+		      return c;
+		      }
+			   
+		  
+		  
+	   }
+	   
+	  
+ 	   
    }
    public void CreateNoeud(String c,org.graphstream.graph.Graph f)
    {
+	   String t;
+	   t=c.replaceAll("[^\\w]","");
+ 	  String[] pass1=t.split("#");
       try
       {
+    	
+    	
+    	  
+    	
+    	
+    	
          Node e=f.getNode(c);
          String s=e.toString();
          
       }
       catch(Exception e){
-         
-         Node a=f.addNode(c);
-         a.setAttribute("ui.label",c);
+    	 
+    	  
+     	 t=transform( c,"http");
+           if(t.isEmpty()){t=transform( c,"#");}
+     	     
+			  Node a=f.addNode(c);
+		         a.setAttribute("ui.label",t);
+		
+		  
+       
          
       }
    }

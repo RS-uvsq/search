@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 
@@ -32,36 +33,91 @@ public class QueryBuild {//cette classe permet de construire une requete à part
 	
 	private QueryParser parser;
 	
-	public QueryBuild(int nbreMot,String motif) throws Exception{
-		if(motif.isEmpty())//si aucun mot n'est entré 
-			throw new Exception("motif vide");
-		QueryParser parser = new QueryParser("description", new StandardAnalyzer());//la requete porte sur la description de la ressource
+	public QueryBuild(int nbreMot,String motif){
+		//la requete porte sur le champ description de la ressource
+		QueryParser parser = new QueryParser("description", new StandardAnalyzer());
 		ArrayList<String> listMot =  keywords(motif);
+		String requeteString = "";
+		//elements du motif different de film,actor maker
+		String litteral1 ="" ;
+		String litteral2="";
+		try {	
+			
+			//si le nombre mots constituant le motif entré par l'utilisateur est egal a 3
+	       	   if(listMot.size()==3){
+	       		   //film realisé par un realisateur ou film joué par un acteur
+			    if(listMot.contains("film") && (listMot.contains("maker") || listMot.contains("actor"))){
+			    	//requete boostée de 5
+			    	 requeteString = "("+listMot.get(0)+" AND "+listMot.get(1)+" AND "+listMot.get(2)+")^5";
 		
-		//si le premier mot du motif est un film
-		if(listMot.size()==3){
-			if(listMot.get(0).equals("film"))
-				requete = parser.parse("(film AND "+listMot.get(1)+" AND "+listMot.get(2)+")^5"//requete sur 3 mots liés par l'opérateur AND
-					+ " (((film AND "+listMot.get(1)+") OR (film AND "+listMot.get(2)+"))^2 "//2 requetes liées par l'opérateur OR
-							+ "(film OR "+listMot.get(1)+" OR "+listMot.get(2)+"))");	//3 requetes.chaque requet constitué d'un seul 
-		}
+			    	 //si le motif contient film and maker
+			    	 if(!listMot.contains("actor")){
+			            for(int i = 0;i<3;i++)
+			            	//trouver le dernier mot du motif different de film et maker
+			    	        if(!listMot.get(i).equals("film")  && !listMot.get(i).equals("maker"))
+			    	            litteral1 = listMot.get(i);  
+			            //construire une requete de mots puis une d'un mot
+				        requeteString = requeteString+" OR ((film AND "+litteral1+") OR (maker AND "+litteral1+"))^2 OR "
+								+ "("+listMot.get(0)+" OR "+listMot.get(1)+" OR "+listMot.get(2)+")";
+			    	 }			    	 
+			    	 
+			    	 if(!listMot.contains("maker")){ //si le motif contient film and actor
+				            for(int i = 0;i<3;i++)
+				            	//trouver le dernier mot du motif different de film et maker
+				    	        if(!listMot.get(i).equals("film") && !listMot.get(i).equals("actor"))
+				    	            litteral1 = listMot.get(i);  
+				            //construire une requete de mots puis une d'un mot
+					        requeteString = requeteString+" OR ((film AND "+litteral1+") OR (actor AND "+litteral1+"))^2 OR "
+									+ "("+listMot.get(1)+" OR "+listMot.get(1)+" OR "+listMot.get(2)+")";
+				    	 }
+			    	}
+			    
+			   
+			    else if(listMot.contains("film")){
+			    	int i= 0;
+			    	boolean trouve =false;
+			    	//trouve le mot différent de film en partant de la gauche
+			    	while(trouve==false || i==3){
+			    		 if(!listMot.get(i).equals("film")){
+			    			 litteral1 = listMot.get(i);
+			    			 trouve = true;
+			    		 }
+			    		  i++;
+			    		  }
+			    	i= 2; 
+			    	
+			    	//trouver le mot différent de film en partant de la droite
+			    	while(trouve==true || i==0){
+			    		 if(!listMot.get(i).equals("film")){
+			    			 litteral2 = listMot.get(i);
+			    			 trouve = false;
+			    		 }
+			    		  i--;
+			    		  }
+           			 requeteString = "(film AND maker AND "+litteral1+") OR "+"(film AND actor AND "+litteral2+")"
+           			 		+ " OR (film AND actor AND "+litteral1+") OR "+"(film AND maker AND "+litteral2+")";
+			    }
+			    	
+			    
+			    
+				}
+	       	   
+	       	 //une requete sur un mot clé de 2 élèments
+	          	if(listMot.size() == 2){
+			               if(listMot.contains("film"))
+				requete = parser.parse("(film AND "+listMot.get(1)+")^5 "
+					+ "(film OR "+listMot.get(0)+" OR "+listMot.get(1)+")");	
+	          	}
 		
-		if(listMot.size() == 2){
-			if(listMot.get(0).equals("film"))
-				requete = parser.parse("(film AND "+listMot.get(1)+")^5 "//2 requete OR.pour chaque requete 2 mots avec AND
-					+ "(film OR "+listMot.get(1)+" OR "+listMot.get(1)+")");	//3 requetes.chaque requet constitué d'un seul 
-		}
-		
-		
-		if(listMot.size() == 1){
-				requete = parser.parse(listMot.get(0)); 
-		}
-		
-		
-		
-		
-		
-		
+	      	   if(listMot.size() == 1){
+	      		   requete = parser.parse(listMot.get(0)); 
+                   	}
+	
+	
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	//3 requetes.chaque requet constitué d'un seul 
 	}
 
 	

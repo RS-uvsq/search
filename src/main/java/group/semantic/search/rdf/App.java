@@ -7,6 +7,6 @@ public class App
 	public static Indexing index;
     public static void main( String[] args )
     {
-    	new views.ProjectFrame1();    
+    	new views.ProjectFrame();    
     }
 }
