@@ -10,12 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -32,28 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 import lucene.Indexing;
@@ -161,7 +137,7 @@ public class ProjectFrame {
 		
 		f=new JFrame();
 		
-	f.setLocationRelativeTo(null);
+		f.setLocationRelativeTo(null);
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    f.setTitle("Searching in RDF graphs");
 	   
@@ -169,7 +145,7 @@ public class ProjectFrame {
 	    f.setAlwaysOnTop(true);
 	    f.setResizable(true);
 	    f.setExtendedState( f.getExtendedState()|JFrame.MAXIMIZED_BOTH );
-		      Label lblCount;    
+		Label lblCount;    
 	    //f.pack();
 		f.setLayout(new BorderLayout());
 		
@@ -192,8 +168,6 @@ public class ProjectFrame {
 		centerPanel.setPreferredSize(new Dimension(300,520));
 		mainPanel.setSize(660,600);
 		mainPanelgrph.setSize(400,600);
-		
-		
 		
 		//construction du modele de donnees de la table	    
 	    //construction du map de Documents lucene vide
@@ -218,48 +192,44 @@ public class ProjectFrame {
 	    topPanel.add(prec);
 	    topPanel.add(Graphinit);
 	    topPanel.add(updateGraph);
-Graphinit.addActionListener(new ActionListener()
 	    
-	    {
-	    	public void actionPerformed(ActionEvent arg0) {
+	    Graphinit.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent arg0){
 	    		 List<String>Resource=new ArrayList<String>();
-	    		int val=tableModel.getRowCount();
-	    		int i=0;
+		    	 int val=tableModel.getRowCount();
+		    	 int i=0;
 			    
 				 String a=action.getpath()[0];
-				  GrapheSeiner=new SousGraph(a,f);
+				 GrapheSeiner=new SousGraph(a,f);
 				 GrapheSeiner.GRAPHINIT();				 
 			}
 	    });
 
-	    updateGraph.addActionListener(new ActionListener()	    
-	    {
+	    updateGraph.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent arg0) {
-	    		 List<String>Resource=new ArrayList<String>();
+	    		List<String>Resource=new ArrayList<String>();
 	    		int val=tableModel.getRowCount();
 	    		int i=0;
-	    		 for(i=0;i<val;i++)
-	    		 {
+	    		 for(i=0;i<val;i++){
 	    			 Resource.add(tableModel.getValueAt(i,1).toString()); 
 	    			// System.out.println(tableModel.getValueAt(i,1).toString());
 	    		 }
 
-			    org.graphstream.graph.Graph graphfinal = new SingleGraph("GraphSteiner");
+			     org.graphstream.graph.Graph graphfinal = new SingleGraph("GraphSteiner");
 				
 				 String a=action.getpath()[0];
-				  GrapheSeiner=new SousGraph(a,Resource,graphfinal, f,true);
+				 GrapheSeiner=new SousGraph(a,Resource,graphfinal, f,true);
 				 GrapheSeiner.exec();
+				 
 				 //MODEL A RECUPER POUR SPARQL
 				 ModelSparql=GrapheSeiner.getNewmodel();
 				
-				 
 				 String split=action.getpath()[1];
 				 
 				 LienFichierRDF=split+"out.rdf";
 				 System.out.println("liens----->"+a+" "+"split:"+ LienFichierRDF);
 				 
-				 //création du fichier rdf du sous graph
-				 
+				 //création du fichier rdf du sous graph				 
 				 GrapheSeiner.ecrireFileRDF( LienFichierRDF);
 				 
 				 
@@ -399,16 +369,16 @@ class OpenFileChooserAction implements ActionListener{
 	private  File file;
 	String  pass1;
 	JFrame fen;
-	public String[] getpath()
-	{
+	
+	public String[] getpath(){
 		String[] str={pass,pass1};
 		return str;
 	}
 	
-	public OpenFileChooserAction(JFrame f)
-	{
+	public OpenFileChooserAction(JFrame f){
 		fen=f;
 	}
+	
 	public void actionPerformed(ActionEvent e) {
 		
 		
@@ -438,8 +408,7 @@ class OpenFileChooserAction implements ActionListener{
         	if (in == null) 
         	  throw new IllegalArgumentException("Fichier: non trouvé");
         	
-        	 pass=file.getPath();
-        	 
+        	pass=file.getPath();        	 
         	pass1=file.getPath().replaceAll(file.getName(),"");
         	
           	Model model = FileManager.get().loadModel(pass);
@@ -454,10 +423,7 @@ class OpenFileChooserAction implements ActionListener{
             
 		}
 	
-}
-
-	
-	
+	}
 
 }
  
