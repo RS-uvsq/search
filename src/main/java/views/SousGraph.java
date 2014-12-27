@@ -1,6 +1,4 @@
-﻿package views;
-
-
+package views;
 
 
 import java.awt.Component;
@@ -37,9 +35,6 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.VCARD;
 
 import edu.uci.ics.jung.graph.Graph;
-
-
-
 
 public class SousGraph {
    private  org.graphstream.graph.Graph graph;
@@ -90,9 +85,6 @@ public class SousGraph {
    public void execute(Model model)
    {
       
-      
-      
-     
        g = new JenaJungGraph(model);
        
        chemin=new HashSet<List<String>>();
@@ -143,8 +135,6 @@ public class SousGraph {
       
    }
    
-   
-  
    //Renvoie le grpah initial
   
    public  void  ajoutarreteInstance()
@@ -186,9 +176,6 @@ public class SousGraph {
 	      }
 	  
 	      
-	       
-	        
-          
 	   //System.out.println("STATEMENTTTTTTTTTTTTTTTTT:"+Statements);
 	   
    }
@@ -226,8 +213,6 @@ public class SousGraph {
       {
          Statement s=i.next();
          
-       
-       
          RDFNode source= g.getSource(s);
          RDFNode destination= g.getDest(s);
          CreateNoeud(source.toString(),graphinit);
@@ -281,8 +266,6 @@ public class SousGraph {
                   if(e1.isReified()){}
                   else
                   {
-                	    
-                	  
                 	
                      //System.out.println("taille:"+path.size());
                 	         for(List<String> st : chemin)
@@ -442,10 +425,7 @@ public class SousGraph {
 			   t=t.replaceAll("[^\\w]","");
 			   return t;
 		    	
-		    	
-		    	
-		        
-		         
+		    	   
 		      }
 		      catch(Exception e){
 		      return c;
@@ -460,27 +440,17 @@ public class SousGraph {
 		   try
 		      {
 		    	
-		    	
-			 
 			   t=pass[1]; 
 			  
 			   return t;
-		    	
-		    	
-		    	
-		        
-		         
+		    	  
 		      }
 		      catch(Exception e){
 		      return c;
 		      }
-			   
-		  
 		  
 	   }
 	   
-	  
- 	   
    }
    public void CreateNoeud(String c,org.graphstream.graph.Graph f)
    {
@@ -490,27 +460,18 @@ public class SousGraph {
       try
       {
     	
-    	
-    	  
-    	
-    	
-    	
          Node e=f.getNode(c);
          String s=e.toString();
          
       }
       catch(Exception e){
-    	 
     	  
      	 t=transform( c,"http");
            if(t.isEmpty()){t=transform( c,"#");}
      	     
 			  Node a=f.addNode(c);
 		         a.setAttribute("ui.label",t);
-		
 		  
-       
-         
       }
    }
    
