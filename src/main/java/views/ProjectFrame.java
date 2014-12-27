@@ -1,4 +1,4 @@
-﻿package views;
+package views;
 
 
 import java.awt.BorderLayout;
@@ -34,27 +34,6 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import lucene.Indexing;
 
@@ -192,8 +171,6 @@ public class ProjectFrame {
 		centerPanel.setPreferredSize(new Dimension(300,520));
 		mainPanel.setSize(660,600);
 		mainPanelgrph.setSize(400,600);
-		
-		
 		
 		//construction du modele de donnees de la table	    
 	    //construction du map de Documents lucene vide
