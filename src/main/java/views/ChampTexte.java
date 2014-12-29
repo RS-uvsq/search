@@ -1,5 +1,6 @@
 package views;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import javax.swing.event.DocumentListener;
 import lucene.Searching;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.store.FSDirectory;
 
 /**********************************************************************************/
 /*****       CLASSE QUI CONSTRUIT NOTRE ZONE DE RECHERCHE   ***********************/
@@ -73,6 +75,7 @@ public class ChampTexte extends JTextField implements DocumentListener {
 			try {
 
 				//previous version
+				
 				//File indexFile = new File("lucene");
 				//if(indexFile.listFiles().length == 0) throw new Exception("l'index est vide. Veuillez en créer un!");
 				//FSDirectory indexDirectory = FSDirectory.open(indexFile);		
