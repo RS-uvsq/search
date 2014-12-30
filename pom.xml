@@ -2,138 +2,51 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>group.semantic.search</groupId>
-  <artifactId>gena.rdf.seach</artifactId>
-  <version>1.0</version>
+  <groupId>fr.uvsq.project</groupId>
+  <artifactId>rdfSearch</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>rdf</name>
+  <name>rdfSearch</name>
   <url>http://maven.apache.org</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-      <maven.compiler.source>1.7</maven.compiler.source>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
-    
-<build>
-    <plugins>
-    	<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-shade-plugin</artifactId>
-			<version>2.3</version>
-			<executions>
-				<execution>
-					<phase>package</phase>
-					<goals>
-						<goal>shade</goal>
-					</goals>
-					<configuration>
-						<transformers>
-							<transformer
-							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							</transformer>
-						</transformers>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.9</version>
-            <executions>
-                <execution>
-                    <id>copy-dependencies</id>
-                    <phase>prepare-package</phase>
-                    <goals>
-                        <goal>copy-dependencies</goal>
-                    </goals>
-                    <configuration>
-                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                        <overWriteReleases>false</overWriteReleases>
-                        <overWriteSnapshots>false</overWriteSnapshots>
-                        <overWriteIfNewer>true</overWriteIfNewer>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.5</version>
-            <configuration>
-                <archive>
-                    <manifest>
-                        <addClasspath>true</addClasspath>
-                        <classpathPrefix>lib/</classpathPrefix>
-                        <mainClass>group.semantic.search.rdf.App</mainClass>
-                    </manifest>
-                </archive>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-    
- <developers>
-  	<developer>
-    	 <email>wondeudaniel@yahoo.fr</email>
-    	 <id>Daniel</id>
-    	 <roles>
-    	 	 <role>developer</role>
-    	 </roles>
-  	</developer>
-
-  	<developer>
-    	 <email>yoricklionel@yahoo.fr</email>
-    	 <id>Yorick</id>
-    	 <roles>
-    	 	 <role>developer</role>
-    	 </roles>
-  	</developer>
-  	
-  	<developer>
-    	 <email>alassndiaye1@gmail.com</email>
-    	 <id>Alassane</id>
-    	 <roles>
-    	 	 <role>developer</role>
-    	 </roles>
-  	</developer>
-
-    <developer>
-       <email>derdouri.Zakaria@gmail.com</email>
-       <id>Zacharia</id>
-       <roles>
-          <role>developer</role>
-       </roles>
-    </developer>
-
-    <developer>
-       <email>s.manouni@yahoo.fr</email>
-       <id>Soukaina</id>
-       <roles>
-          <role>developer</role>
-       </roles>
-    </developer>
-
-    <developer>
-       <email>zidenchokri91@gmail.com</email>
-       <id>Ziden</id>
-       <roles>
-          <role>developer</role>
-       </roles>
-    </developer>
-
-    <developer>
-       <email>abdallaoui.mehdi@yahoo.fr</email>
-       <id>Mehdi</id>
-       <roles>
-          <role>developer</role>
-       </roles>
-    </developer>
-
-	</developers>
-   <dependencies>  
+	
+  <build>
+      <plugins>
+          <plugin>            
+              
+              <artifactId>maven-assembly-plugin</artifactId>
+              
+              <configuration>
+                  <descriptorRefs>                      
+                      <descriptorRef>jar-with-dependencies</descriptorRef>
+                  </descriptorRefs>
+                  <archive>
+                      <manifest>
+                          <addClasspath>true</addClasspath>
+                          <classpathPrefix>lib/</classpathPrefix>
+                          <mainClass>fr.uvsq.project.rdfSearch.App</mainClass>
+                      </manifest>
+                  </archive>
+              </configuration>
+              <executions>
+                  <execution>
+                      <phase>package</phase>
+                      <goals>
+                          <goal>single</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
+      </plugins> 
+  </build>
+  		
+  <dependencies>  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -182,4 +95,56 @@
     	<version>4.10.2</version>
     </dependency>
   </dependencies>
+  
+  <developers>
+	  	<developer>
+	    	 <email>wondeudaniel@yahoo.fr</email>
+	    	 <id>Daniel</id>
+	    	 <roles>
+	    	 	 <role>developer</role>
+	    	 </roles>
+	  	</developer>	
+	  	<developer>
+	    	 <email>yoricklionel@yahoo.fr</email>
+	    	 <id>Yorick</id>
+	    	 <roles>
+	    	 	 <role>developer</role>
+	    	 </roles>
+	  	</developer>	  	
+	  	<developer>
+	    	 <email>alassndiaye1@gmail.com</email>
+	    	 <id>Alassane</id>
+	    	 <roles>
+	    	 	 <role>developer</role>
+	    	 </roles>
+	  	</developer>	
+	    <developer>
+	       <email>derdouri.Zakaria@gmail.com</email>
+	       <id>Zacharia</id>
+	       <roles>
+	          <role>developer</role>
+	       </roles>
+	    </developer>	
+	    <developer>
+	       <email>s.manouni@yahoo.fr</email>
+	       <id>Soukaina</id>
+	       <roles>
+	          <role>developer</role>
+	       </roles>
+	    </developer>	
+	    <developer>
+	       <email>zidenchokri91@gmail.com</email>
+	       <id>Ziden</id>
+	       <roles>
+	          <role>developer</role>
+	       </roles>
+	    </developer>	
+	    <developer>
+	       <email>abdallaoui.mehdi@yahoo.fr</email>
+	       <id>Mehdi</id>
+	       <roles>
+	          <role>developer</role>
+	       </roles>
+	    </developer>
+	</developers>
 </project>
