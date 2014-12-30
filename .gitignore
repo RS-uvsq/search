@@ -1,3 +1,5 @@
 target
-lucene
-
+.settings
+.classpath
+.project
+src/main/resources/luceneIndexes

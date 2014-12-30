@@ -1,4 +1,4 @@
-package group.semantic.search.rdf;
+package fr.uvsq.project.rdfSearch;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
