@@ -3,38 +3,26 @@ package lucene;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 
 
 public class Searching {
-	/*
-	 * permet de lire l'index comme IndexWriter permet d'écrire dans l'index
-	 */
-	private IndexReader index;
 	
-	/*
-	 * requete construite a partir de QueryBuild
-	 */
-	private String requete;
+	//permet de lire l'index comme IndexWriter permet d'écrire dans l'index	
+	private IndexReader index;	
 	
-	/*
-	 * l'ensemble des documents lucene correspondants au motif de la recherche	
-	 */
+	//requete construite a partir de QueryBuild	 
+	private String requete;	
 	
-	/*
-	 * association de mots clé et de ressources.Un mot clé est associé à 0 ou plusieurs ressources
-	 */
+	//l'ensemble des documents lucene correspondants au motif de la recherche	
+	// association de mots clé et de ressources.Un mot clé est associé à 0 ou plusieurs ressources
+	 
 	private HashMap<String,Set<Document> > keywordResources;
 	
 	/*
@@ -46,8 +34,6 @@ public class Searching {
 		Set<Document> documents ;//ensemble de documents associés à un mot-clé
 		
 		IndexReader reader = DirectoryReader.open(indexDirectory);//on ouvre le repertoire de l'index pour la lecture
-	
-
 			
 			documents = new HashSet<Document>();
 			//QueryParser parser = new QueryParser("description", new StandardAnalyzer());//la requete porte sur les champs propriete et litteral

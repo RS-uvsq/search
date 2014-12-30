@@ -1,12 +1,7 @@
 package lucene;
 
 import java.util.ArrayList;
-/*
- * @author Alassane Ndiaye
- * @version 1
- */
 import java.util.StringTokenizer;
-
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
