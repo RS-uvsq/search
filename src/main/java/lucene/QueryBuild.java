@@ -134,11 +134,9 @@ public class QueryBuild {
 			               else   
 			            	   if(listMot.contains("Actor"))
 			   				requete = parser.parse("("+listMot.get(0)+ " AND "+listMot.get(1)+")^5 "
-			   					+ "(Film OR "+listMot.get(0)+" OR "+listMot.get(1)+")");
-			               
+			   					+ "(Film OR "+listMot.get(0)+" OR "+listMot.get(1)+")");			               
 			              
-	          	}
-	         
+	          	}       
 	          	
 	          	
 	          	//une requete sur un mot clé d'un seul élément

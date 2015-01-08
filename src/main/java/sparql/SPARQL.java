@@ -58,14 +58,15 @@ public class SPARQL {
 		//test on some words then deduce semantic
 		
 			//contains FILM
-			if(userWords.contains("film")){
+			if(userWords.contains("Film")){
 				//First_Name Last_Name date
 				
-				String properties = "{ ?sub sem:First_Name ?lit }"
-								   +" UNION { ?sub sem:Last_Name ?lit } "
-								   +" UNION { ?sub sem:date ?lit }"
-								   +" UNION { ?sub sem:title ?lit } "
-								   +" UNION { ?sub sem:Type_Film ?lit }";
+				String properties = "{ ?sub sem:First_Name ?lit .}"
+								   +" UNION { ?sub sem:Last_Name ?lit .} "
+								   +" UNION { ?sub sem:date ?lit .}"
+								   +" UNION { ?sub sem:Age ?lit .}"
+								   +" UNION { ?sub sem:title ?lit .} "
+								   +" UNION { ?sub sem:Type_Film ?lit .}";
 				String filters ="";
 				
 				//we consider all the words except the word FILM which is the class
@@ -86,11 +87,13 @@ public class SPARQL {
 			}//end FILM
 			
 			//contains PRODUCER-- maison de production
-			else if(userWords.contains("producer")){
+			else if(userWords.contains("Producer")){
 				//name
 					
-				String properties = "{ ?sub sem:name ?lit }"
-								    +"UNION { ?sub sem:date ?lit }";									   
+				String properties = "{ ?sub sem:name ?lit .}"
+								    +" UNION { ?sub sem:date ?lit .}"								    
+									+" UNION { ?sub sem:title ?lit .} "
+									+" UNION { ?sub sem:Type_Film ?lit .}";									   
 				String filters ="";
 					
 				//we consider all the words except the word FILM which is the class
@@ -109,16 +112,19 @@ public class SPARQL {
 				
 			}//end PRODUCER	
 			
-			else if(userWords.contains("actor")){
+			else if(userWords.contains("Actor")){
 				
 				String properties = "{ ?sub sem:First_Name ?lit }"
-									   +" UNION { ?sub sem:Last_Name ?lit } "
-									   +" UNION { ?sub sem:Age ?lit }";
+									   +" UNION { ?sub sem:Last_Name ?lit .} "
+									   +" UNION { ?sub sem:Age ?lit .}"
+									   +" UNION { ?sub sem:date ?lit .}"
+									   +" UNION { ?sub sem:title ?lit .} "
+									   +" UNION { ?sub sem:Type_Film ?lit .}";
 				String filters ="";
 					
 				//we consider all the words except the word FILM which is the class
 				for(String user : userWords){						
-					if(! user.equalsIgnoreCase("actor") ){
+					if(! user.equalsIgnoreCase("Actor") ){
 						filters += filters +"FILTER regex(?lit,'"+user+"', 'i' )";
 					}
 				}
@@ -132,11 +138,14 @@ public class SPARQL {
 				
 			}//end ACTOR
 			
-			else if(userWords.contains("film") && userWords.contains("maker")){
+			else if(userWords.contains("Film") && userWords.contains("Maker")){
 				
 				String properties = "{ ?sub sem:First_Name ?lit }"
-									 +" UNION { ?sub sem:Last_Name ?lit } "
-									 +" UNION { ?sub sem:Age ?lit }";
+									 +" UNION { ?sub sem:Last_Name ?lit .} "
+									 +" UNION { ?sub sem:Age ?lit .}"
+									 +" UNION { ?sub sem:date ?lit .}"
+									 +" UNION { ?sub sem:title ?lit .} "
+									 +" UNION { ?sub sem:Type_Film ?lit .}";
 				String filters ="";
 					
 				//we consider all the words except the word FILM which is the class
